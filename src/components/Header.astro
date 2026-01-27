@@ -1,0 +1,33 @@
+---
+const links = [
+  { name: "Home", href: "#home" },
+  { name: "About", href: "#about" },
+  { name: "Projects", href: "#projects" },
+  { name: "Skills", href: "#skills" },
+  { name: "Contact", href: "#contact" },
+];
+---
+
+<header class="fixed top-0 left-0 w-full z-50 bg-dark-900/80 backdrop-blur-md border-b border-dark-800">
+  <div class="container mx-auto px-6 py-4 flex justify-between items-center">
+    <a href="#" class="text-xl font-bold text-primary tracking-tighter">Franco Marinozzi</a>
+    
+    <nav class="hidden md:flex space-x-8">
+      {links.map((link) => (
+        <a 
+          href={link.href} 
+          class="text-sm font-medium text-dark-50 hover:text-white hover:shadow-[0_0_15px_rgba(86,22,67,0.5)] transition-all duration-300"
+        >
+          {link.name}
+        </a>
+      ))}
+    </nav>
+
+    <!-- Mobile Menu Button (Placeholder for now) -->
+    <button class="md:hidden text-dark-50 focus:outline-none">
+      <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7" />
+      </svg>
+    </button>
+  </div>
+</header>

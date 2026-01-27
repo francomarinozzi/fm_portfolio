@@ -1,0 +1,24 @@
+@import "tailwindcss";
+
+@theme {
+  --color-primary: #9333ea;
+  /* Purple-600: Deep Violet */
+  --color-dark-900: #1a1b26;
+  --color-dark-800: #24283b;
+  --color-dark-50: #c0caf5;
+  --font-sans: 'Inter', system-ui, sans-serif;
+}
+
+/* Custom utilities */
+@layer utilities {
+  .text-glow {
+    text-shadow: 0 0 10px rgba(147, 51, 234, 0.4), 0 0 20px rgba(147, 51, 234, 0.2);
+  }
+}
+
+@layer base {
+  body {
+    @apply bg-dark-900 text-dark-50 antialiased;
+    font-family: var(--font-sans);
+  }
+}

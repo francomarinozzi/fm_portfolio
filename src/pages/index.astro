@@ -1,0 +1,18 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Hero from '../components/Hero';
+import Experience from '../components/Experience';
+import Projects from '../components/Projects';
+import Skills from '../components/Skills';
+import Hobbies from '../components/Hobbies';
+import Contact from '../components/Contact';
+---
+
+<Layout title="Franco Marinozzi | Backend Developer">
+	<Hero client:load />
+	<Experience client:visible />
+	<Projects client:visible />
+	<Skills client:visible />
+	<Hobbies client:visible />
+	<Contact client:visible />
+</Layout>
