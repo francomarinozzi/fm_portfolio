@@ -19,7 +19,7 @@ const item = {
 
 export default function Experience() {
     return (
-        <section id="about" className="py-20">
+        <section id="about" className="py-20 lg:py-20 pb-12 lg:pb-20">
             <motion.div
                 initial="hidden"
                 whileInView="show"
@@ -31,31 +31,84 @@ export default function Experience() {
                     <div className="h-px bg-dark-800 flex-grow ml-4"></div>
                 </motion.h2>
 
-                <div className="space-y-12">
-                    {workExperience.map((exp, index) => (
+                <div className="grid grid-cols-1 lg:grid-cols-[1.2fr_1fr] gap-12 items-start">
+                    {/* Work Experience Content */}
+                    <div className="space-y-12">
+                        {workExperience.map((exp, index) => (
+                            <motion.div
+                                key={index}
+                                variants={item}
+                                className="group relative pl-8 border-l-2 border-dark-800 hover:border-primary transition-colors duration-300"
+                            >
+                                <div className="absolute -left-[9px] top-0 w-4 h-4 rounded-full bg-dark-900 border-2 border-dark-800 group-hover:border-primary transition-colors duration-300"></div>
+
+                                <h3 className="text-2xl font-bold text-white mb-1">{exp.role}</h3>
+                                <div className="text-primary font-mono mb-4 text-sm">
+                                    @ {exp.company} <span className="text-dark-50 mx-2">|</span> {exp.period}
+                                </div>
+
+                                <ul className="space-y-3 text-dark-50">
+                                    {exp.responsibilities.map((resp, i) => (
+                                        <li key={i} className="flex items-start gap-3">
+                                            <span className="text-primary mt-1.5">▹</span>
+                                            <span>{resp}</span>
+                                        </li>
+                                    ))}
+                                </ul>
+                            </motion.div>
+                        ))}
+                    </div>
+
+                    {/* Boombet Logo with Violet Glow and Animation - Desktop */}
+                    <motion.div
+                        variants={item}
+                        className="hidden lg:flex justify-center items-center sticky top-24"
+                    >
                         <motion.div
-                            key={index}
-                            variants={item}
-                            className="group relative pl-8 border-l-2 border-dark-800 hover:border-primary transition-colors duration-300"
+                            className="boombet-logo-container"
+                            animate={{
+                                y: [0, -20, 0],
+                                scale: [1, 1.05, 1],
+                            }}
+                            transition={{
+                                duration: 3,
+                                repeat: Infinity,
+                                ease: "easeInOut"
+                            }}
                         >
-                            <div className="absolute -left-[9px] top-0 w-4 h-4 rounded-full bg-dark-900 border-2 border-dark-800 group-hover:border-primary transition-colors duration-300"></div>
-
-                            <h3 className="text-2xl font-bold text-white mb-1">{exp.role}</h3>
-                            <div className="text-primary font-mono mb-4 text-sm">
-                                @ {exp.company} <span className="text-dark-50 mx-2">|</span> {exp.period}
-                            </div>
-
-                            <ul className="space-y-3 text-dark-50">
-                                {exp.responsibilities.map((resp, i) => (
-                                    <li key={i} className="flex items-start gap-3">
-                                        <span className="text-primary mt-1.5">▹</span>
-                                        <span>{resp}</span>
-                                    </li>
-                                ))}
-                            </ul>
+                            <img
+                                src="/images/boombet-logo.png"
+                                alt="Boombet Logo"
+                                className="boombet-logo"
+                            />
                         </motion.div>
-                    ))}
+                    </motion.div>
                 </div>
+
+                {/* Boombet Logo - Mobile Version */}
+                <motion.div
+                    variants={item}
+                    className="lg:hidden flex justify-center mt-8"
+                >
+                    <motion.div
+                        className="boombet-logo-container"
+                        animate={{
+                            y: [0, -15, 0],
+                            scale: [1, 1.05, 1],
+                        }}
+                        transition={{
+                            duration: 3,
+                            repeat: Infinity,
+                            ease: "easeInOut"
+                        }}
+                    >
+                        <img
+                            src="/images/boombet-logo.png"
+                            alt="Boombet Logo"
+                            className="boombet-logo-mobile"
+                        />
+                    </motion.div>
+                </motion.div>
             </motion.div>
         </section>
     );

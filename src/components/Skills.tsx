@@ -38,7 +38,9 @@ export default function Skills() {
                         <div className="space-y-6">
                             {Object.entries(skills).map(([category, items]) => (
                                 <div key={category}>
-                                    <h4 className="text-sm font-mono text-primary mb-2 uppercase tracking-wider">{category}</h4>
+                                    <h4 className="text-sm font-mono text-primary mb-2 uppercase tracking-wider">
+                                        {category.replace(/_/g, ' ')}
+                                    </h4>
                                     <div className="flex flex-wrap gap-3">
                                         {items.map((skill, i) => (
                                             <SkillItem key={i} skill={skill} />

@@ -8,26 +8,147 @@ const links = [
 ];
 ---
 
-<header class="fixed top-0 left-0 w-full z-50 bg-dark-900/80 backdrop-blur-md border-b border-dark-800">
-  <div class="container mx-auto px-6 py-4 flex justify-between items-center">
-    <a href="#" class="text-xl font-bold text-primary tracking-tighter">Franco Marinozzi</a>
+<header class="fixed top-0 left-0 w-full z-50 bg-dark-900/90 backdrop-blur-xl border-b border-white/5 transition-all duration-300 shadow-lg">
+  <div class="container mx-auto px-6 py-4 flex justify-between items-center bg-transparent">
+    <a href="#" class="group relative flex items-center active:scale-95 transition-transform duration-300">
+      <div class="flex flex-col translate-y-[9px] group-hover:translate-y-0 transition-transform duration-500 ease-out">
+        <span class="text-xl font-bold font-display tracking-tighter text-white group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-linear-to-r group-hover:from-primary group-hover:to-[#5eead4] group-hover:tracking-normal transition-all duration-500 ease-out leading-none">
+          Franco Marinozzi
+        </span>
+        <span class="text-[10px] font-mono text-primary/60 mt-1.5 opacity-0 group-hover:opacity-100 transition-all duration-500 translate-y-2 group-hover:translate-y-0 tracking-[0.25em] uppercase font-bold">
+          Software Developer
+        </span>
+      </div>
+    </a>
     
-    <nav class="hidden md:flex space-x-8">
-      {links.map((link) => (
+    <nav class="hidden md:flex items-center space-x-1">
+      {links.map((link, index) => (
         <a 
           href={link.href} 
-          class="text-sm font-medium text-dark-50 hover:text-white hover:shadow-[0_0_15px_rgba(86,22,67,0.5)] transition-all duration-300"
+          class="relative px-4 py-2 text-sm font-medium text-dark-50/80 hover:text-white transition-colors duration-300 group overflow-hidden"
         >
-          {link.name}
+          <span class="relative z-10 flex items-center gap-1.5 font-display">
+            <span class="text-[10px] text-primary/60 font-mono mt-0.5">0{index + 1}.</span>
+            {link.name}
+          </span>
+          <span class="absolute bottom-0 left-0 w-full h-0.5 bg-linear-to-r from-primary to-secondary transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left"></span>
+          <span class="absolute inset-0 bg-primary/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-md"></span>
         </a>
       ))}
+      
+      <div class="h-4 w-px bg-white/10 mx-4"></div>
+      
+      <a 
+        href="https://github.com/francomarinozzi" 
+        target="_blank"
+        class="p-2 transition-all hover:scale-110 text-primary hover:text-secondary hover:drop-shadow-[0_0_8px_rgba(6,182,212,0.5)]"
+      >
+        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+          <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z" />
+        </svg>
+      </a>
     </nav>
 
-    <!-- Mobile Menu Button (Placeholder for now) -->
-    <button class="md:hidden text-dark-50 focus:outline-none">
+    <!-- Mobile Menu Button -->
+    <button id="menu-toggle" class="md:hidden text-dark-50 focus:outline-none z-[100] p-2 hover:bg-white/5 rounded-lg transition-colors">
       <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7" />
+        <path id="menu-icon" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7" />
+        <path id="close-icon" class="hidden" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
       </svg>
     </button>
   </div>
 </header>
+
+<!-- Mobile Menu Backdrop -->
+<div id="mobile-backdrop" class="fixed inset-0 bg-black/40 backdrop-blur-sm z-[80] hidden opacity-0 transition-opacity duration-300 md:hidden"></div>
+
+<!-- Mobile Menu Sidebar -->
+<div id="mobile-menu" class="fixed top-0 right-0 bottom-0 w-[80%] max-w-[320px] bg-dark-900 border-l border-white/5 z-[90] transform translate-x-full transition-transform duration-500 cubic-bezier(0.4, 0, 0.2, 1) md:hidden flex flex-col p-8 pt-24 shadow-[-20px_0_50px_rgba(0,0,0,0.5)] overflow-y-auto">
+  <div class="flex flex-col space-y-2">
+    <div class="flex flex-col mb-8">
+      <span class="text-white font-bold font-display tracking-tight text-2xl leading-none">Franco</span>
+      <span class="text-primary text-sm font-mono mt-1">Marinozzi</span>
+    </div>
+
+    <span class="text-[10px] font-mono text-primary/60 uppercase tracking-[0.2em] mb-4 font-bold">Navigation</span>
+    {links.map((link, index) => (
+      <a 
+        href={link.href} 
+        class="mobile-link group py-4 flex items-center justify-between border-b border-white/5"
+      >
+        <div class="flex flex-col">
+          <span class="text-primary text-[10px] font-mono mb-1">0{index + 1}</span>
+          <span class="text-xl font-bold text-white/90 group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-linear-to-r group-hover:from-primary group-hover:to-secondary transition-all duration-300 uppercase tracking-wider font-display">
+            {link.name}
+          </span>
+        </div>
+        <svg class="w-5 h-5 text-primary opacity-0 -translate-x-4 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3" />
+        </svg>
+      </a>
+    ))}
+  </div>
+
+  <div class="mt-auto pt-10">
+    <div class="flex flex-col gap-6">
+      <div class="flex flex-col gap-2">
+        <span class="text-[10px] font-mono text-primary/40 uppercase tracking-widest">Connect</span>
+        <div class="flex gap-6">
+          <a href="https://github.com/francomarinozzi" target="_blank" class="text-white/70 hover:text-primary transition-colors text-xs font-medium font-mono">GITHUB</a>
+          <a href="#" class="text-white/70 hover:text-primary transition-colors text-xs font-medium font-mono">LINKEDIN</a>
+        </div>
+      </div>
+      <p class="text-[9px] text-white/20 font-mono tracking-widest">© 2026 FRANCO MARINOZZI</p>
+    </div>
+  </div>
+</div>
+
+<script>
+  const menuToggle = document.getElementById('menu-toggle');
+  const mobileMenu = document.getElementById('mobile-menu');
+  const mobileBackdrop = document.getElementById('mobile-backdrop');
+  const menuIcon = document.getElementById('menu-icon');
+  const closeIcon = document.getElementById('close-icon');
+  const mobileLinks = document.querySelectorAll('.mobile-link');
+
+  let isMenuOpen = false;
+
+  function toggleMenu() {
+    isMenuOpen = !isMenuOpen;
+    
+    if (isMenuOpen) {
+      // Open
+      mobileBackdrop?.classList.remove('hidden');
+      setTimeout(() => {
+        mobileBackdrop?.classList.remove('opacity-0');
+        mobileMenu?.classList.remove('translate-x-full');
+      }, 10);
+      menuIcon?.classList.add('hidden');
+      closeIcon?.classList.remove('hidden');
+      document.body.style.overflow = 'hidden';
+    } else {
+      // Close
+      mobileMenu?.classList.add('translate-x-full');
+      mobileBackdrop?.classList.add('opacity-0');
+      setTimeout(() => {
+        mobileBackdrop?.classList.add('hidden');
+      }, 300);
+      menuIcon?.classList.remove('hidden');
+      closeIcon?.classList.add('hidden');
+      document.body.style.overflow = '';
+    }
+  }
+
+  menuToggle?.addEventListener('click', (e) => {
+    e.stopPropagation();
+    toggleMenu();
+  });
+
+  mobileBackdrop?.addEventListener('click', toggleMenu);
+
+  mobileLinks.forEach(link => {
+    link.addEventListener('click', () => {
+      setTimeout(toggleMenu, 300);
+    });
+  });
+</script>
