@@ -184,7 +184,7 @@ export default function ProjectModal({ project, isOpen, onClose }: ProjectModalP
                                 {project.features && project.features.length > 0 && (
                                     <div className="mb-10">
                                         <h3 className="text-2xl font-bold text-white mb-4 flex items-center gap-3">
-                                            <span className="text-primary">Key Features</span>
+                                            <span className="text-primary">Key Challenges</span>
                                         </h3>
                                         <ul className="space-y-3">
                                             {project.features.map((feature, index) => (
@@ -201,7 +201,7 @@ export default function ProjectModal({ project, isOpen, onClose }: ProjectModalP
                                 {technologies && technologies.length > 0 && (
                                     <div className="mb-10">
                                         <h3 className="text-2xl font-bold text-white mb-6 flex items-center gap-3">
-                                            <span className="text-primary">Technologies Used</span>
+                                            <span className="text-primary">Tech stack</span>
                                         </h3>
                                         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-6">
                                             {technologies.map((tech, index) => (
