@@ -51,7 +51,7 @@ export const skills = {
 
 export const projects = [
   {
-    title: "Logistics Management System",
+    title: "Logistics Management System - Cost rates module",
     type: "Academic & Professional Practice",
     status: "Completed",
     description: "A comprehensive logistics software solution developed as a final degree project, demonstrating full-cycle development capabilities.",
@@ -65,6 +65,7 @@ export const projects = [
     features: [
       "Dynamic cost rate management system",
       "Integration with other modules of the same app, working as microservices infrastructure",
+      "CI/CD working on different environments such as development, staging and production.",
       "Database design and optimization",
       "Formal technical documentation delivery(requirements, diagrams,design, deployment guides)",
       "Group work following agile methodologies (scrumban), working across sprints, planning and review meetings"
