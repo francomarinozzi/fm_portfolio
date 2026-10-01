@@ -1,6 +1,8 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { workExperience } from '../data/content';
+import { SectionHeading, TerminalWindow, slugify } from './Terminal';
+import ExperienceModal, { type Experience as ExperienceEntry } from './ExperienceModal';
 
 const container = {
     hidden: { opacity: 0 },
@@ -12,104 +14,68 @@ const container = {
     }
 };
 
+const MAX_CARD_TAGS = 6;
+
 const item = {
     hidden: { opacity: 0, y: 20 },
     show: { opacity: 1, y: 0 }
 };
 
 export default function Experience() {
+    const [selected, setSelected] = useState<ExperienceEntry | null>(null);
+
     return (
-        <section id="about" className="py-20 lg:py-20 pb-12 lg:pb-20">
+        <section id="experience" className="py-14 md:py-20">
             <motion.div
                 initial="hidden"
                 whileInView="show"
                 viewport={{ once: true, margin: "-100px" }}
                 variants={container}
             >
-                <motion.h2 variants={item} className="text-3xl md:text-4xl font-bold text-white mb-12 flex items-center gap-4">
-                    <span className="text-primary text-glow">01.</span> Work Experience
-                    <div className="h-px bg-dark-800 flex-grow ml-4"></div>
-                </motion.h2>
-
-                <div className="grid grid-cols-1 lg:grid-cols-[1.2fr_1fr] gap-12 items-start">
-                    {/* Work Experience Content */}
-                    <div className="space-y-12">
-                        {workExperience.map((exp, index) => (
-                            <motion.div
-                                key={index}
-                                variants={item}
-                                className="group relative pl-8 border-l-2 border-dark-800 hover:border-primary transition-colors duration-300"
-                            >
-                                <div className="absolute -left-[9px] top-0 w-4 h-4 rounded-full bg-dark-900 border-2 border-dark-800 group-hover:border-primary transition-colors duration-300"></div>
-
-                                <h3 className="text-2xl font-bold text-white mb-1">{exp.role}</h3>
-                                <div className="text-primary font-mono mb-4 text-sm">
-                                    @ {exp.company} <span className="text-dark-50 mx-2">|</span> {exp.period}
-                                </div>
-
-                                <ul className="space-y-3 text-dark-50">
-                                    {exp.responsibilities.map((resp, i) => (
-                                        <li key={i} className="flex items-start gap-3">
-                                            <span className="text-primary mt-1.5">▹</span>
-                                            <span>{resp}</span>
-                                        </li>
-                                    ))}
-                                </ul>
-                            </motion.div>
-                        ))}
-                    </div>
-
-                    {/* Boombet Logo with Violet Glow and Animation - Desktop */}
-                    <motion.div
-                        variants={item}
-                        className="hidden lg:flex justify-center items-center sticky top-24"
-                    >
-                        <motion.div
-                            className="boombet-logo-container"
-                            animate={{
-                                y: [0, -20, 0],
-                                scale: [1, 1.05, 1],
-                            }}
-                            transition={{
-                                duration: 3,
-                                repeat: Infinity,
-                                ease: "easeInOut"
-                            }}
-                        >
-                            <img
-                                src="/images/boombet-logo.png"
-                                alt="Boombet Logo"
-                                className="boombet-logo"
-                            />
-                        </motion.div>
-                    </motion.div>
-                </div>
-
-                {/* Boombet Logo - Mobile Version */}
-                <motion.div
-                    variants={item}
-                    className="lg:hidden flex justify-center mt-8"
-                >
-                    <motion.div
-                        className="boombet-logo-container"
-                        animate={{
-                            y: [0, -15, 0],
-                            scale: [1, 1.05, 1],
-                        }}
-                        transition={{
-                            duration: 3,
-                            repeat: Infinity,
-                            ease: "easeInOut"
-                        }}
-                    >
-                        <img
-                            src="/images/boombet-logo.png"
-                            alt="Boombet Logo"
-                            className="boombet-logo-mobile"
-                        />
-                    </motion.div>
+                <motion.div variants={item}>
+                    <SectionHeading index="01" title="Work Experience" command="cat experience.log" />
                 </motion.div>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8">
+                    {workExperience.map((exp) => (
+                        <motion.div
+                            key={exp.company}
+                            variants={item}
+                            onClick={() => setSelected(exp)}
+                            className="group cursor-pointer h-full min-w-0"
+                        >
+                            <TerminalWindow
+                                title={`~/experience/${slugify(exp.company)}.log`}
+                                className="h-full flex flex-col group-hover:border-primary transition-colors duration-300"
+                                bodyClassName="p-5 flex flex-col flex-1"
+                            >
+                                <div className="text-xs text-term-yellow mb-3">[{exp.period}]</div>
+                                <h3 className="text-lg md:text-xl font-bold text-white mb-1 group-hover:text-primary transition-colors">{exp.role}</h3>
+                                <div className="text-primary text-sm mb-4">@ {exp.company}</div>
+
+                                <p className="text-dark-50 text-sm mb-4">{exp.description}</p>
+
+                                {exp.technologies && (
+                                    <div className="flex flex-wrap gap-x-3 gap-y-1 text-xs text-term-mint mb-5">
+                                        {exp.technologies.slice(0, MAX_CARD_TAGS).map((tech) => (
+                                            <span key={tech}>#{slugify(tech)}</span>
+                                        ))}
+                                        {exp.technologies.length > MAX_CARD_TAGS && (
+                                            <span className="text-term-comment">+{exp.technologies.length - MAX_CARD_TAGS}</span>
+                                        )}
+                                    </div>
+                                )}
+
+                                <div className="mt-auto text-xs text-primary/70 group-hover:text-primary transition-colors">
+                                    &gt; open details<span className="term-cursor opacity-0 group-hover:opacity-100" />
+                                </div>
+                            </TerminalWindow>
+                        </motion.div>
+                    ))}
+                </div>
             </motion.div>
+
+            <ExperienceModal experience={selected} onClose={() => setSelected(null)} />
         </section>
     );
 }

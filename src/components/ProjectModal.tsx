@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 import { createPortal } from 'react-dom';
 import { motion, AnimatePresence } from 'framer-motion';
+import { Prompt, slugify } from './Terminal';
 
 interface Technology {
     name: string;
@@ -86,7 +87,7 @@ export default function ProjectModal({ project, isOpen, onClose }: ProjectModalP
                         animate={{ opacity: 1 }}
                         exit={{ opacity: 0 }}
                         onClick={onClose}
-                        className="fixed inset-0 bg-black/95 backdrop-blur-md z-[9999]"
+                        className="fixed inset-0 bg-black/90 z-[9999]"
                     />
 
                     {/* Modal Container */}
@@ -97,30 +98,33 @@ export default function ProjectModal({ project, isOpen, onClose }: ProjectModalP
                         transition={{ type: "spring", duration: 0.5 }}
                         className="fixed inset-0 md:inset-8 lg:inset-16 z-[10000] overflow-hidden flex items-center justify-center pointer-events-none"
                     >
-                        <div className="bg-dark-900 w-full h-full md:rounded-2xl border-primary/20 md:border-2 overflow-y-auto project-modal-scroll pointer-events-auto relative">
-                            {/* Close Button - High z-index and sticky */}
-                            <button
-                                onClick={onClose}
-                                className="fixed top-4 right-4 z-[10001] p-3 bg-dark-800/90 backdrop-blur-md border border-primary/30 rounded-xl text-primary hover:bg-primary/20 transition-all duration-300 shadow-2xl"
-                                aria-label="Close modal"
-                            >
-                                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
-                                </svg>
-                            </button>
+                        <div className="bg-dark-950 w-full h-full md:rounded-lg border-dark-700 md:border flex flex-col pointer-events-auto relative overflow-hidden">
+                            {/* Window title bar */}
+                            <div className="flex items-center gap-2 px-4 py-3 bg-dark-800/80 border-b border-dark-700 shrink-0">
+                                <button onClick={onClose} className="w-3.5 h-3.5 rounded-full bg-term-red hover:brightness-125 transition" aria-label="Close modal" />
+                                <span className="w-3.5 h-3.5 rounded-full bg-term-yellow/80" />
+                                <span className="w-3.5 h-3.5 rounded-full bg-term-green/80" />
+                                <span className="flex-1 text-center text-xs text-term-comment truncate px-2">
+                                    ~/projects/{slugify(project.title)}/README.md
+                                </span>
+                                <button
+                                    onClick={onClose}
+                                    className="text-xs text-term-comment hover:text-primary border border-dark-700 hover:border-primary rounded px-2 py-1 transition-colors"
+                                    aria-label="Close modal"
+                                >
+                                    <span className="sm:hidden">[x]</span><span className="hidden sm:inline">[esc] close</span>
+                                </button>
+                            </div>
 
-                            <div className="p-6 pt-20 md:p-10 lg:p-12 relative">
+                            <div className="p-4 sm:p-6 md:p-10 lg:p-12 relative overflow-y-auto project-modal-scroll flex-1">
                                 {/* Header */}
-                                <div className="mb-8 mt-4">
-                                    <div className="flex flex-wrap items-center gap-2 mb-4">
-                                        <span className="px-2.5 py-1 bg-primary/20 border border-primary/30 rounded-full text-primary text-[11px] md:text-sm font-mono uppercase tracking-widest leading-none">
-                                            {project.type}
-                                        </span>
-                                        <span className="px-2.5 py-1 bg-dark-800 border border-dark-900/50 rounded-full text-dark-50 text-[11px] md:text-sm font-mono uppercase tracking-widest leading-none">
-                                            {project.status}
-                                        </span>
+                                <div className="mb-8">
+                                    <Prompt command={`cat ./${slugify(project.title)}/README.md`} className="text-xs md:text-sm mb-6 hidden sm:block" />
+                                    <div className="flex flex-wrap items-center gap-3 mb-4 text-xs md:text-sm">
+                                        <span className="text-primary">[{project.type}]</span>
+                                        {project.status && <span className="text-term-green">[{project.status}]</span>}
                                     </div>
-                                    <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-4 text-glow leading-tight">
+                                    <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-4 text-glow leading-tight">
                                         {project.title}
                                     </h2>
                                 </div>
@@ -128,8 +132,8 @@ export default function ProjectModal({ project, isOpen, onClose }: ProjectModalP
                                 {/* Repository Links */}
                                 {project.links && (project.links.frontend || project.links.backend || project.links.live) && (
                                     <div className="mb-10">
-                                        <h3 className="text-2xl font-bold text-white mb-4 flex items-center gap-3">
-                                            <span className="text-primary">Repository</span>
+                                        <h3 className="text-xl md:text-2xl font-bold text-white mb-4">
+                                            <span className="text-term-comment">## </span>Repository
                                         </h3>
                                         <div className="flex flex-wrap gap-4">
                                             {project.links.frontend && (
@@ -137,7 +141,7 @@ export default function ProjectModal({ project, isOpen, onClose }: ProjectModalP
                                                     href={project.links.frontend}
                                                     target="_blank"
                                                     rel="noopener noreferrer"
-                                                    className="flex items-center gap-2 px-4 py-2 bg-dark-800/50 border border-primary/30 rounded-lg hover:bg-primary/10 hover:border-primary transition-all duration-300 group"
+                                                    className="flex items-center gap-2 px-4 py-2 border border-dark-700 rounded hover:bg-primary/10 hover:border-primary transition-all duration-300 group"
                                                 >
                                                     <svg className="w-5 h-5 text-primary" fill="currentColor" viewBox="0 0 24 24">
                                                         <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z" />
@@ -153,7 +157,7 @@ export default function ProjectModal({ project, isOpen, onClose }: ProjectModalP
                                                     href={project.links.backend}
                                                     target="_blank"
                                                     rel="noopener noreferrer"
-                                                    className="flex items-center gap-2 px-4 py-2 bg-dark-800/50 border border-primary/30 rounded-lg hover:bg-primary/10 hover:border-primary transition-all duration-300 group"
+                                                    className="flex items-center gap-2 px-4 py-2 border border-dark-700 rounded hover:bg-primary/10 hover:border-primary transition-all duration-300 group"
                                                 >
                                                     <svg className="w-5 h-5 text-primary" fill="currentColor" viewBox="0 0 24 24">
                                                         <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z" />
@@ -171,8 +175,8 @@ export default function ProjectModal({ project, isOpen, onClose }: ProjectModalP
                                 {/* Description */}
                                 {project.fullDescription && (
                                     <div className="mb-10">
-                                        <h3 className="text-2xl font-bold text-white mb-4 flex items-center gap-3">
-                                            <span className="text-primary">About</span>
+                                        <h3 className="text-xl md:text-2xl font-bold text-white mb-4">
+                                            <span className="text-term-comment">## </span>About
                                         </h3>
                                         <div className="text-dark-50 leading-relaxed whitespace-pre-line">
                                             {project.fullDescription}
@@ -183,13 +187,13 @@ export default function ProjectModal({ project, isOpen, onClose }: ProjectModalP
                                 {/* Features */}
                                 {project.features && project.features.length > 0 && (
                                     <div className="mb-10">
-                                        <h3 className="text-2xl font-bold text-white mb-4 flex items-center gap-3">
-                                            <span className="text-primary">Key Challenges</span>
+                                        <h3 className="text-xl md:text-2xl font-bold text-white mb-4">
+                                            <span className="text-term-comment">## </span>Key Challenges
                                         </h3>
                                         <ul className="space-y-3">
                                             {project.features.map((feature, index) => (
                                                 <li key={index} className="flex items-start gap-3 text-dark-50">
-                                                    <span className="text-primary mt-1.5">▹</span>
+                                                    <span className="text-term-green shrink-0">-</span>
                                                     <span>{feature}</span>
                                                 </li>
                                             ))}
@@ -200,14 +204,14 @@ export default function ProjectModal({ project, isOpen, onClose }: ProjectModalP
                                 {/* Technologies */}
                                 {technologies && technologies.length > 0 && (
                                     <div className="mb-10">
-                                        <h3 className="text-2xl font-bold text-white mb-6 flex items-center gap-3">
-                                            <span className="text-primary">Tech stack</span>
+                                        <h3 className="text-xl md:text-2xl font-bold text-white mb-6">
+                                            <span className="text-term-comment">## </span>Tech stack
                                         </h3>
-                                        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-6">
+                                        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
                                             {technologies.map((tech, index) => (
                                                 <div
                                                     key={index}
-                                                    className="flex flex-col items-center gap-3 p-4 bg-dark-800/50 rounded-xl border border-dark-800 hover:border-primary/30 transition-all duration-300 group"
+                                                    className="flex flex-col items-center gap-3 p-4 bg-dark-900/60 rounded border border-dark-700 hover:border-primary/60 transition-all duration-300 group"
                                                 >
                                                     <div className="w-16 h-16 flex items-center justify-center">
                                                         <img
@@ -231,7 +235,7 @@ export default function ProjectModal({ project, isOpen, onClose }: ProjectModalP
                                         {/* Gallery Carrousel */}
                                         {project.media.gallery && project.media.gallery.length > 0 && (
                                             <div className="relative w-full max-w-4xl group">
-                                                <div className="relative aspect-[16/10] sm:aspect-video rounded-xl overflow-hidden border-2 border-primary/20 shadow-lg shadow-primary/10 bg-dark-800 touch-pan-y">
+                                                <div className="relative aspect-[16/10] sm:aspect-video rounded overflow-hidden border border-dark-700 bg-dark-800 touch-pan-y">
                                                     <AnimatePresence mode="wait">
                                                         <motion.img
                                                             key={currentImageIndex}
@@ -267,7 +271,7 @@ export default function ProjectModal({ project, isOpen, onClose }: ProjectModalP
                                                                     e.stopPropagation();
                                                                     setCurrentImageIndex((prev) => (prev - 1 + project.media!.gallery!.length) % project.media!.gallery!.length);
                                                                 }}
-                                                                className="absolute left-2 md:left-4 top-1/2 -translate-y-1/2 p-2 bg-dark-900/60 border border-primary/30 rounded-full text-primary md:opacity-0 md:group-hover:opacity-100 transition-opacity duration-300 hover:bg-primary hover:text-white z-10"
+                                                                className="absolute left-2 md:left-4 top-1/2 -translate-y-1/2 p-2 bg-dark-950/80 border border-dark-700 rounded text-primary md:opacity-0 md:group-hover:opacity-100 transition-opacity duration-300 hover:bg-primary hover:text-white z-10"
                                                                 aria-label="Previous image"
                                                             >
                                                                 <svg className="w-5 h-5 md:w-6 md:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -279,7 +283,7 @@ export default function ProjectModal({ project, isOpen, onClose }: ProjectModalP
                                                                     e.stopPropagation();
                                                                     setCurrentImageIndex((prev) => (prev + 1) % project.media!.gallery!.length);
                                                                 }}
-                                                                className="absolute right-2 md:right-4 top-1/2 -translate-y-1/2 p-2 bg-dark-900/60 border border-primary/30 rounded-full text-primary md:opacity-0 md:group-hover:opacity-100 transition-opacity duration-300 hover:bg-primary hover:text-white z-10"
+                                                                className="absolute right-2 md:right-4 top-1/2 -translate-y-1/2 p-2 bg-dark-950/80 border border-dark-700 rounded text-primary md:opacity-0 md:group-hover:opacity-100 transition-opacity duration-300 hover:bg-primary hover:text-white z-10"
                                                                 aria-label="Next image"
                                                             >
                                                                 <svg className="w-5 h-5 md:w-6 md:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -299,7 +303,7 @@ export default function ProjectModal({ project, isOpen, onClose }: ProjectModalP
                                                                         e.stopPropagation();
                                                                         setCurrentImageIndex(idx);
                                                                     }}
-                                                                    className={`w-2 h-2 rounded-full transition-all duration-300 ${idx === currentImageIndex ? 'bg-primary w-6' : 'bg-white/30 hover:bg-white/50'}`}
+                                                                    className={`w-2 h-2 transition-all duration-300 ${idx === currentImageIndex ? 'bg-primary w-6' : 'bg-white/30 hover:bg-white/50'}`}
                                                                     aria-label={`Go to slide ${idx + 1}`}
                                                                 />
                                                             ))}
@@ -324,7 +328,7 @@ export default function ProjectModal({ project, isOpen, onClose }: ProjectModalP
                                         {/* Presentation Image (Legacy/Single) */}
                                         {project.media.image && !project.media.gallery && (
                                             <div
-                                                className="rounded-xl overflow-hidden border-2 border-primary/20 shadow-lg shadow-primary/10 w-full max-w-4xl cursor-zoom-in group/img relative"
+                                                className="rounded overflow-hidden border border-dark-700 w-full max-w-4xl cursor-zoom-in group/img relative"
                                                 onClick={() => setZoomMedia({ type: 'image', url: project.media!.image! })}
                                             >
                                                 <img
@@ -343,7 +347,7 @@ export default function ProjectModal({ project, isOpen, onClose }: ProjectModalP
                                         {/* Video - Looping without controls */}
                                         {project.media.video && (
                                             <div
-                                                className="rounded-xl overflow-hidden border-2 border-primary/20 shadow-lg shadow-primary/10 w-full max-w-4xl bg-dark-800 cursor-zoom-in group/vid relative"
+                                                className="rounded overflow-hidden border border-dark-700 w-full max-w-4xl bg-dark-800 cursor-zoom-in group/vid relative"
                                                 onClick={() => setZoomMedia({ type: 'video', url: project.media!.video! })}
                                             >
                                                 <video
@@ -377,13 +381,13 @@ export default function ProjectModal({ project, isOpen, onClose }: ProjectModalP
                                 className="fixed inset-0 z-[20000] flex items-center justify-center p-4 md:p-10"
                             >
                                 <div
-                                    className="absolute inset-0 bg-black/95 backdrop-blur-xl"
+                                    className="absolute inset-0 bg-black/95"
                                     onClick={() => setZoomMedia(null)}
                                 />
 
                                 <button
                                     onClick={() => setZoomMedia(null)}
-                                    className="absolute top-6 right-6 z-50 p-3 bg-dark-800/80 border border-primary/30 rounded-full text-white hover:bg-primary transition-all shadow-2xl"
+                                    className="absolute top-6 right-6 z-50 p-3 bg-dark-800/80 border border-dark-700 rounded text-white hover:bg-primary hover:text-dark-950 transition-all shadow-2xl"
                                 >
                                     <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
@@ -395,7 +399,7 @@ export default function ProjectModal({ project, isOpen, onClose }: ProjectModalP
                                     animate={{ scale: 1, opacity: 1 }}
                                     exit={{ scale: 0.9, opacity: 0 }}
                                     transition={{ type: "spring", damping: 25, stiffness: 300 }}
-                                    className="relative max-w-full max-h-full flex items-center justify-center shadow-2xl shadow-primary/20 rounded-2xl overflow-hidden"
+                                    className="relative max-w-full max-h-full flex items-center justify-center shadow-2xl shadow-primary/20 rounded overflow-hidden"
                                 >
                                     {zoomMedia.type === 'image' ? (
                                         <img

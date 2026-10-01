@@ -1,55 +1,72 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { personalInfo } from '../data/content';
+import { Prompt, TerminalWindow } from './Terminal';
+import GlitchImage from './GlitchImage';
+
+const reveal = {
+    initial: { opacity: 0 },
+    animate: { opacity: 1 },
+    transition: { duration: 0.4 }
+};
 
 export default function Hero() {
+    const [step, setStep] = useState(0);
+
     return (
-        <section id="home" className="min-h-screen flex items-center justify-center py-20">
-            <div className="grid md:grid-cols-2 gap-12 items-center w-full">
+        <section id="home" className="md:min-h-screen flex items-center justify-center pt-6 pb-10 md:py-20">
+            <div className="grid md:grid-cols-[1.3fr_1fr] gap-6 md:gap-12 items-center w-full">
                 <motion.div
-                    initial={{ opacity: 0, x: -50 }}
-                    whileInView={{ opacity: 1, x: 0 }}
-                    viewport={{ once: true }}
-                    transition={{ duration: 0.8 }}
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.6 }}
+                    className="min-w-0"
                 >
-                    <span className="text-primary font-mono mb-4 block text-lg text-glow">Hello, I'm</span>
-                    <h1 className="text-5xl md:text-7xl font-bold text-white mb-6 tracking-tight leading-tight">
-                        {personalInfo.name}
-                    </h1>
-                    <h2 className="text-2xl md:text-3xl text-dark-50 font-medium mb-6">
-                        {personalInfo.role}
-                    </h2>
-                    <p className="text-lg text-dark-50 mb-8 max-w-lg leading-relaxed">
-                        {personalInfo.bio}
-                    </p>
-                    <div className="flex gap-4">
-                        <a href="#contact" className="px-8 py-3 bg-primary text-white rounded-lg hover:bg-opacity-90 transition-all font-medium shadow-[0_0_20px_rgba(86,22,67,0.3)] hover:shadow-[0_0_30px_rgba(86,22,67,0.6)]">
-                            Get in Touch
-                        </a>
-                        <a href="#projects" className="px-8 py-3 border border-dark-800 text-white rounded-lg hover:bg-dark-800 transition-all font-medium backdrop-blur-sm">
-                            View Work
-                        </a>
-                    </div>
+                    <TerminalWindow title="fran@portfolio: ~ — ssh" bodyClassName="p-4 sm:p-5 md:p-8 min-h-[360px] md:min-h-[440px] text-[13px] sm:text-sm md:text-base">
+                        <p className="text-term-comment mb-4">Welcome, visitor.</p>
+
+                        <Prompt command="whoami" delay={400} onDone={() => setStep(1)} />
+                        {step >= 1 && (
+                            <motion.div {...reveal} className="mt-3 mb-6">
+                                <h1 className="text-[2rem] sm:text-4xl md:text-6xl font-bold text-white tracking-tight leading-tight text-glow">
+                                    {personalInfo.name}
+                                </h1>
+                                <p className="text-base sm:text-lg md:text-xl text-primary mt-2">
+                                    <span className="text-term-comment"># </span>{personalInfo.role}
+                                </p>
+                            </motion.div>
+                        )}
+
+                        {step >= 1 && <Prompt command="cat bio.txt" delay={300} onDone={() => setStep(2)} />}
+                        {step >= 2 && (
+                            <motion.p {...reveal} className="mt-3 mb-6 text-dark-50 max-w-xl leading-relaxed">
+                                {personalInfo.bio}
+                            </motion.p>
+                        )}
+
+                        {step >= 2 && <Prompt command="ls ./links" delay={300} onDone={() => setStep(3)} />}
+                        {step >= 3 && (
+                            <motion.div {...reveal} className="mt-4 mb-6 flex flex-wrap gap-3 md:gap-4">
+                                <a href="#contact" className="px-4 md:px-5 py-2.5 bg-primary text-dark-950 font-bold rounded hover:bg-term-mint transition-all">
+                                    [ get-in-touch ]
+                                </a>
+                                <a href="#projects" className="px-4 md:px-5 py-2.5 border border-dark-700 text-white rounded hover:border-primary hover:text-primary transition-all">
+                                    [ view-work ]
+                                </a>
+                            </motion.div>
+                        )}
+
+                        {step >= 3 && <Prompt command="" cursor />}
+                    </TerminalWindow>
                 </motion.div>
 
-                <motion.div
-                    initial={{ opacity: 0, scale: 0.8 }}
-                    whileInView={{ opacity: 1, scale: 1 }}
-                    viewport={{ once: true }}
-                    transition={{ duration: 0.8, delay: 0.2 }}
-                    className="relative flex justify-center"
-                >
-                    {/* Glow effect */}
-                    <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-3/4 h-3/4 bg-primary opacity-20 blur-[100px] rounded-full pointer-events-none"></div>
-
-                    <motion.img
+                <div className="flex justify-center order-first md:order-none">
+                    <GlitchImage
                         src={personalInfo.avatar}
                         alt={personalInfo.name}
-                        className="relative z-10 w-full max-w-md drop-shadow-2xl"
-                        animate={{ y: [0, -15, 0] }}
-                        transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
+                        className="w-36 sm:w-56 md:w-full md:max-w-sm"
                     />
-                </motion.div>
+                </div>
             </div>
         </section>
     );

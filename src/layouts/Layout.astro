@@ -10,42 +10,29 @@ const { title } = Astro.props;
 ---
 
 <!doctype html>
-<html lang="en" class="scroll-smooth">
+<html lang="en" class="scroll-smooth overflow-x-clip">
 	<head>
 		<meta charset="UTF-8" />
 		<meta name="description" content="Franco Marinozzi Portfolio - Backend Developer" />
-		<meta name="viewport" content="width=device-width" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
 		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700;800&display=swap" rel="stylesheet" />
 		<meta name="generator" content={Astro.generator} />
 		<title>{title}</title>
 	</head>
-	<body class="bg-dark-900 text-dark-50 antialiased overflow-x-hidden relative selection:bg-primary selection:text-white">
-		
-		<!-- Spotlight Effect Container -->
-		<div 
-			id="spotlight"
-			class="pointer-events-none fixed inset-0 z-30 transition-opacity duration-300"
-			style="background: radial-gradient(600px circle at var(--x) var(--y), rgba(86, 22, 67, 0.15), transparent 40%);"
-		></div>
+	<body class="bg-dark-900 text-dark-50 antialiased overflow-x-hidden relative selection:bg-primary selection:text-dark-950">
 
 		<Header />
-		
+
 		<main class="pt-20 relative z-10 container mx-auto px-6">
 			<slot />
 		</main>
 
-		<footer class="py-6 text-center text-sm text-dark-800 border-t border-dark-800 mt-20">
+		<footer class="py-6 text-center text-xs text-term-comment border-t border-dashed border-dark-700 mt-20">
+			<span class="text-term-green">fran@portfolio</span>:~$ exit <span class="mx-2">·</span> © 2026 Franco Marinozzi
 		</footer>
 
-		<script>
-			const spotlight = document.getElementById('spotlight');
-			
-			if (spotlight) {
-				window.addEventListener('mousemove', (e) => {
-					spotlight.style.setProperty('--x', `${e.clientX}px`);
-					spotlight.style.setProperty('--y', `${e.clientY}px`);
-				});
-			}
-		</script>
 	</body>
 </html>

@@ -1,89 +1,144 @@
 @import "tailwindcss";
 
 @theme {
-  --color-primary: #9333ea;
-  /* Purple-600: Deep Violet */
-  --color-dark-900: #1a1b26;
-  --color-dark-800: #24283b;
-  --color-dark-50: #c0caf5;
-  --font-sans: 'Inter', system-ui, sans-serif;
+  /* Terminal palette: near-black grays + phosphor greens */
+  --color-primary: #4ade80;
+  --color-term-green: #22c55e;
+  --color-term-mint: #86efac;
+  --color-term-yellow: #d4b85a;
+  --color-term-red: #e5534b;
+  --color-term-comment: #5c6370;
+  --color-dark-950: #0a0b0b;
+  --color-dark-900: #0f1011;
+  --color-dark-800: #18191b;
+  --color-dark-700: #26282b;
+  --color-dark-50: #c9d1c9;
+  --font-sans: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
+  --font-mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
 }
 
 /* Custom utilities */
 @layer utilities {
   .text-glow {
-    text-shadow: 0 0 10px rgba(147, 51, 234, 0.4), 0 0 20px rgba(147, 51, 234, 0.2);
+    text-shadow: 0 0 10px rgba(74, 222, 128, 0.25);
   }
 
-  /* Boombet Logo Styles */
-  .boombet-logo-container {
-    position: relative;
+  /* Blinking block cursor */
+  .term-cursor {
     display: inline-block;
+    width: 0.6em;
+    height: 1.1em;
+    margin-left: 2px;
+    vertical-align: text-bottom;
+    background: var(--color-primary);
+    animation: cursorBlink 1s steps(1) infinite;
   }
 
-  .boombet-logo {
-    width: 280px;
-    height: auto;
-    filter: drop-shadow(0 0 20px rgba(147, 51, 234, 0.6)) drop-shadow(0 0 40px rgba(147, 51, 234, 0.4)) drop-shadow(0 0 60px rgba(147, 51, 234, 0.2));
-    animation: violetPulse 2s ease-in-out infinite;
-    transition: all 0.3s ease;
-  }
-
-  .boombet-logo:hover {
-    filter: drop-shadow(0 0 30px rgba(147, 51, 234, 0.8)) drop-shadow(0 0 50px rgba(147, 51, 234, 0.6)) drop-shadow(0 0 80px rgba(147, 51, 234, 0.4));
-    transform: scale(1.05);
-  }
-
-  @keyframes violetPulse {
-
-    0%,
-    100% {
-      filter: drop-shadow(0 0 20px rgba(147, 51, 234, 0.6)) drop-shadow(0 0 40px rgba(147, 51, 234, 0.4)) drop-shadow(0 0 60px rgba(147, 51, 234, 0.2));
-    }
-
+  @keyframes cursorBlink {
     50% {
-      filter: drop-shadow(0 0 30px rgba(147, 51, 234, 0.8)) drop-shadow(0 0 50px rgba(147, 51, 234, 0.6)) drop-shadow(0 0 70px rgba(147, 51, 234, 0.3));
+      opacity: 0;
     }
   }
 
-  /* Mobile version - smaller size */
-  .boombet-logo-mobile {
-    width: 240px;
-    height: auto;
-    filter: drop-shadow(0 0 15px rgba(147, 51, 234, 0.6)) drop-shadow(0 0 30px rgba(147, 51, 234, 0.4)) drop-shadow(0 0 45px rgba(147, 51, 234, 0.2));
-    animation: violetPulse 2s ease-in-out infinite;
-    transition: all 0.3s ease;
+  /* Glitch image: short RGB-split burst, only on hover */
+  /* Layers stay out of the render tree until hover, so the filters and
+     blend mode cost nothing while idle */
+  .glitch-layer {
+    display: none;
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    opacity: 0;
+    pointer-events: none;
+    mix-blend-mode: screen;
   }
 
-  .boombet-logo-mobile:hover {
-    filter: drop-shadow(0 0 25px rgba(147, 51, 234, 0.8)) drop-shadow(0 0 40px rgba(147, 51, 234, 0.6)) drop-shadow(0 0 60px rgba(147, 51, 234, 0.4));
-    transform: scale(1.05);
+  .glitch:hover .glitch-layer {
+    display: block;
+  }
+
+  .glitch-layer-1 {
+    filter: sepia(1) hue-rotate(65deg) saturate(6) brightness(1.1);
+  }
+
+  .glitch-layer-2 {
+    filter: sepia(1) hue-rotate(-50deg) saturate(5);
+  }
+
+  .glitch:hover .glitch-layer-1 {
+    animation: glitchLayer1 0.45s steps(1) 1;
+  }
+
+  .glitch:hover .glitch-layer-2 {
+    animation: glitchLayer2 0.45s steps(1) 1;
+  }
+
+  @keyframes glitchLayer1 {
+    0%, 85%, 100% { opacity: 0; transform: none; clip-path: inset(0); }
+    10% { opacity: 0.6; transform: translate(-4px, 0); clip-path: inset(12% 0 70% 0); }
+    35% { opacity: 0.6; transform: translate(3px, 0); clip-path: inset(48% 0 32% 0); }
+    60% { opacity: 0.6; transform: translate(-3px, 0); clip-path: inset(72% 0 8% 0); }
+  }
+
+  @keyframes glitchLayer2 {
+    0%, 90%, 100% { opacity: 0; transform: none; clip-path: inset(0); }
+    20% { opacity: 0.5; transform: translate(4px, 0); clip-path: inset(60% 0 22% 0); }
+    45% { opacity: 0.5; transform: translate(-3px, 0); clip-path: inset(5% 0 80% 0); }
+    70% { opacity: 0.5; transform: translate(3px, 0); clip-path: inset(38% 0 45% 0); }
   }
 
   /* Project Modal Scrollbar */
   .project-modal-scroll::-webkit-scrollbar {
-    width: 12px;
+    width: 10px;
   }
 
   .project-modal-scroll::-webkit-scrollbar-track {
-    background: rgba(26, 27, 38, 0.5);
-    border-radius: 10px;
+    background: var(--color-dark-950);
   }
 
   .project-modal-scroll::-webkit-scrollbar-thumb {
-    background: rgba(147, 51, 234, 0.3);
-    border-radius: 10px;
-    border: 2px solid rgba(26, 27, 38, 0.5);
+    background: var(--color-dark-700);
+    border: 2px solid var(--color-dark-950);
   }
 
   .project-modal-scroll::-webkit-scrollbar-thumb:hover {
-    background: rgba(147, 51, 234, 0.5);
+    background: var(--color-primary);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+
+    .term-cursor,
+    .glitch-layer {
+      animation: none;
+    }
   }
 }
 
 @layer base {
+  section[id] {
+    scroll-margin-top: 4.5rem;
+  }
+
   body {
     @apply bg-dark-900 text-dark-50 antialiased;
     font-family: var(--font-sans);
+  }
+
+  ::-webkit-scrollbar {
+    width: 10px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: var(--color-dark-950);
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: var(--color-dark-700);
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background: var(--color-primary);
   }
 }

@@ -17,10 +17,10 @@ export default function SkillItem({ skill }: SkillProps) {
         >
             <div
                 className={`
-            px-4 py-2 rounded-lg text-sm border transition-all duration-300 flex items-center gap-3 overflow-hidden
+            px-3 py-1.5 rounded text-sm border transition-all duration-300 flex items-center gap-3 overflow-hidden
             ${isHovered
-                        ? 'bg-dark-900 border-primary text-white shadow-[0_0_15px_rgba(147,51,234,0.3)] pr-6'
-                        : 'bg-dark-800 border-dark-800 text-dark-50'
+                        ? 'bg-dark-900 border-primary text-white pr-5'
+                        : 'bg-dark-800/60 border-dark-700 text-dark-50'
                     }
         `}
             >

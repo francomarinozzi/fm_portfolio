@@ -1,7 +1,7 @@
 export const personalInfo = {
   name: "Franco Marinozzi",
   role: "Software Developer & CS Student",
-  avatar: "../assets/fm_icon.png", // Assuming we move the file here
+  avatar: "/assets/fm_icon.webp",
   bio: "Computer Science student. Fascinated by how computers work since childhood, I’m passionate about building solid software and diving into new technologies."
 };
 
@@ -9,45 +9,91 @@ const defaultLogo = "/images/webscraping-logo.gif"
 
 export const workExperience = [
   {
-    company: "Boombet",
-    role: "Backend Developer & Cloud Infrastructure Manager",
+    company: "West Digital Alliance",
+    role: "Backend & Cloud Developer",
     period: "Present", // inferred
-    description: "Driving backend development and infrastructure management for a dynamic platform.",
+    description: "I architect and build backend systems from the ground up — from requirements analysis and architectural decisions to the Azure infrastructure and CI/CD pipelines that run them.",
+    // Names must match skillGroups entries to reuse their icons and categories
+    technologies: ["Java", "Spring Boot", "PostgreSQL", "Microsoft Azure", "Docker", "CI/CD", "Linux", "n8n", "Playwright", "JavaScript", "Web Scraping", "Git", "Postman"],
     responsibilities: [
-      "Architected and maintained backend services using Java and Spring Boot.",
-      "Managed cloud infrastructure on Microsoft Azure, ensuring high availability and scalability.",
-      "Database design and management (PostgreSQL) ",
-      "Developed automation and web scraping scripts.",
-      "Provided hardware and software troubleshooting to maintain system stability."
+      {
+        area: "analysis & architecture",
+        items: [
+          "Gather and analyze requirements, turning business needs into technical solutions.",
+          "Make architectural decisions across projects: system design, technology choices, and how services are structured and deployed."
+        ]
+      },
+      {
+        area: "backend",
+        items: [
+          "Architect and implement multiple backend systems from the ground up, designing scalable REST APIs with Java and Spring Boot.",
+          "Integrate a range of third-party services and external APIs."
+        ]
+      },
+      {
+        area: "cloud & devops",
+        items: [
+          "Manage infrastructure on Microsoft Azure: Container Apps, Azure Database for PostgreSQL, Static Web Apps, Storage Accounts and Ubuntu Virtual Machines, among others.",
+          "Own deployments through GitHub Actions pipelines, including troubleshooting and fixing CI/CD failures."
+        ]
+      },
+      {
+        area: "data & automation",
+        items: [
+          "Administer PostgreSQL databases.",
+          "Automate workflows with n8n and JavaScript scripts.",
+          "Build web scraping scripts with Playwright (JavaScript)."
+        ]
+      }
     ]
   }
 ];
 
-export const skills = {
-  backend: [
-    { name: "Java", icon: "/images/java-logo.png" },
-    { name: "Spring Boot", icon: "/images/springboot-logo.png" },
-    { name: "PostgreSQL", icon: "/images/PostgresSQL-logo.png" },
-    { name: "REST API Design", icon: defaultLogo },
-    { name: "Postman", icon: "/images/postman-logo.png" }
-  ],
-  cloud_Infrastructure: [
-    { name: "Microsoft Azure", icon: "/images/azure-logo.png" },
-    { name: "Docker", icon: "/images/Docker-logo.png" },
-    { name: "CI/CD", icon: "/images/GitHub Actions-logo.png" }
-  ],
-  automation: [
-    { name: "N8N", icon: "/images/n8n-logo.png" },
-    { name: "Playwright", icon: "/images/playwright-logo.png" },
-    { name: "Web Scraping", icon: "/images/webscraping-logo.gif" }
-  ],
-  general: [
-    { name: "System Design", icon: defaultLogo }, //cambiar
-    { name: "AI Integration", icon: defaultLogo }, //cambiar
-    { name: "Linux", icon: "/images/Linux-logo.png" },
-    { name: "Git", icon: "/images/Git-logo.png" }
-  ]
-};
+export const skillGroups = [
+  {
+    label: "backend",
+    items: [
+      { name: "Java", icon: "/images/java-logo.png" },
+      { name: "Spring Boot", icon: "/images/springboot-logo.png" },
+      { name: "Spring Security", icon: null },
+      { name: "Hibernate / JPA", icon: null },
+      { name: "TypeScript", icon: "/images/typescript-logo.png" },
+      { name: "NestJS", icon: null },
+      { name: "REST API Design", icon: "/images/restapi-logo.png" },
+      { name: "PostgreSQL", icon: "/images/PostgresSQL-logo.png" },
+      { name: "MySQL", icon: "/images/mysql-logo.png" }
+    ]
+  },
+  {
+    label: "cloud & devops",
+    items: [
+      { name: "Microsoft Azure", icon: "/images/azure-logo.png" },
+      { name: "Docker", icon: "/images/Docker-logo.png" },
+      { name: "CI/CD", icon: "/images/GitHub Actions-logo.png" },
+      { name: "Linux", icon: "/images/Linux-logo.png" }
+    ]
+  },
+  {
+    label: "automation",
+    items: [
+      { name: "n8n", icon: "/images/n8n-logo.png" },
+      { name: "Playwright", icon: "/images/playwright-logo.png" },
+      { name: "JavaScript", icon: null },
+      { name: "Web Scraping", icon: defaultLogo }
+    ]
+  },
+  {
+    label: "tools & practices",
+    items: [
+      { name: "Git", icon: "/images/Git-logo.png" },
+      { name: "Postman", icon: "/images/postman-logo.png" },
+      { name: "System Design", icon: null },
+      { name: "Scrum / Agile", icon: null },
+      { name: "Technical Documentation", icon: null },
+      { name: "AI-assisted Development", icon: null }
+    ]
+  }
+];
 
 export const projects = [
   {
@@ -133,11 +179,25 @@ export const projects = [
   }
 ];
 
+// status: "studying" = actively learning now, "exploring" = on the radar
 export const futureInterests = [
-  "Networking",
-  "DevOps & Infrastructure",
-  "Cybersecurity",
-  "Linux"
+  { name: "Software Architecture", status: "studying" },
+  { name: "Cloud Computing", status: "studying" },
+  { name: "Networking", status: "studying" }
+];
+
+// status: "earned" or "in-progress". url is optional (credential / verification link)
+export const certifications: {
+  name: string;
+  issuer: string;
+  date: string;
+  status: "earned" | "in-progress";
+  url?: string;
+  credentialId?: string;
+}[] = [
+  { name: "n8n + MCP: Automatización y agentes de IA inteligentes", issuer: "DevTalles", date: "Oct 2025", status: "earned", credentialId: "ag7mggrssn" },
+  { name: "PostgreSQL Database Administration", issuer: "CDAC Kolkata", date: "Nov 2024", status: "earned" },
+  { name: "Curso de armado y reparación de computadoras", issuer: "UTN Buenos Aires", date: "Jul 2020", status: "earned" },
 ];
 
 export const hobbies = [
